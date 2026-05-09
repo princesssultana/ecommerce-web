@@ -11,8 +11,8 @@ class HomeController extends Controller
 {
     public function home(){
         
-        $categories = Category::all(); 
-        $products = Product::all(); 
+        $categories = Category::take(3)->get(); 
+        $products = Product::latest()->take(4)->get(); 
         return view ('frontend.pages.home', compact('categories', 'products'));
     }
 }

@@ -13,6 +13,7 @@
                         <h2>Featured Categories</h2>
                         <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                             suffered alteration in some form.</p>
+                            <a href="{{ route('frontend.products.index') }}" class="btn">See All Products</a>
                     </div>
                 </div>
             </div>
@@ -24,14 +25,14 @@
                         <h3 class="heading">{{ $category->name }}</h3>
                         <p>{{$category->description}}</p>
                         <ul>
-                            <li><a href="product-grids.html"></a></li>
+                            <li><a href="{{ route('frontend.products.index') }}">View Products</a></li>
                             <li><a href="product-grids.html"></a></li>
                             <li><a href="product-grids.html"></a></li>
                             <li><a href="product-grids.html"></a></li>
                             <li><a href="product-grids.html"></a></li>
                         </ul>
                         <div class="images">
-                            <img src="{{ asset('storage/' . $category->image) }}" alt="#">
+                            <img src="{{ url('/categories/' . $category->image) }}" alt="#">
                         </div>
                     </div>
                     <!-- End Single Category -->
@@ -42,58 +43,57 @@
     </section>
     <!-- End Features Area -->
 
-    <!-- Start Trending Product Area -->
-    <section class="trending-product section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2>Trending Product</h2>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                            suffered alteration in some form.</p>
-                    </div>
+   <!-- Start Trending Product Area -->
+<section class="trending-product section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title">
+                    <h2>Trending Product</h2>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have
+                        suffered alteration in some form.</p>
+                    {{-- See All Button --}}
+                    <a href="{{ route('frontend.products.index') }}" class="btn" style="margin-top:15px; display:inline-block;">See All Products</a>
                 </div>
             </div>
-            <div class="row">
-                @foreach($products as $product)
-                 <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Product -->
-                    <div class="single-product">
-                            <img src="{{url('/products/' . $product->thumbnail) }}" alt="#">
-                                <a href="{{url('/products/' . $product->thumbnail)}}" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                            </div>
-                        </div>
-                        <div class="product-info">
-                            <span class="category">{{ $product->category->name ?? '' }}</span>
-                            <h4 class="title">
-                                <a href="{{url('/products/' . $product->thumbnail)}}">{{ $product->name }}</a>
-                                <p>{{$product->description}}</p>
-                            </h4>
-                            <ul class="review">
-                                <li><i class="lni lni-star-filled"></i></li>
-                                <li><i class="lni lni-star-filled"></i></li>
-                                <li><i class="lni lni-star-filled"></i></li>
-                                <li><i class="lni lni-star-filled"></i></li>
-                                <li><i class="lni lni-star"></i></li>
-                                <li><span>4.0 Review(s)</span></li>
-                            </ul>
-                            <div class="price">
-                                <span>${{ $product->price }}</span>
-                                <span class="discount-price">${{ $product->discount_price }}</span>
-                            
-                            </div>
-                            
+        </div>
+        <div class="row">
+            @foreach($products as $product)
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Product -->
+                <div class="single-product">
+                    <div class="product-image">
+                        <img src="{{ url('/products/' . $product->thumbnail) }}" alt="#">
+                        <div class="button">
+                            <a href="#" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
                         </div>
                     </div>
-                    <!-- End Single Product -->
-                     @endforeach
-               
-               
-                
+                    <div class="product-info">
+                        <span class="category">{{ $product->category->name ?? '' }}</span>
+                        <h4 class="title">
+                            <a href="#">{{ $product->name }}</a>
+                        </h4>
+                        <ul class="review">
+                            <li><i class="lni lni-star-filled"></i></li>
+                            <li><i class="lni lni-star-filled"></i></li>
+                            <li><i class="lni lni-star-filled"></i></li>
+                            <li><i class="lni lni-star-filled"></i></li>
+                            <li><i class="lni lni-star"></i></li>
+                            <li><span>4.0 Review(s)</span></li>
+                        </ul>
+                        <div class="price">
+                            <span>${{ $product->price }}</span>
+                            <span class="discount-price">${{ $product->discount_price }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Single Product -->
             </div>
+            @endforeach
         </div>
-    </section>
-    <!-- End Trending Product Area -->
+    </div>
+</section>
+<!-- End Trending Product Area -->
 
     <!-- Start Banner Area -->
     <section class="banner section">

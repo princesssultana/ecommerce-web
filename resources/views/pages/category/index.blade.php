@@ -37,7 +37,7 @@
             {{-- Image --}}
             <td>
                 @if($category->image)
-                    <img src="{{ asset('storage/' . $category->image) }}"
+                    <img src="{{url('/categories/' . $category->image)}}" alt="{{ $category->name }}"
                          width="50" height="50"
                          style="object-fit:cover; border-radius:6px;">
                 @else
@@ -110,7 +110,7 @@
                                 <label class="form-label fw-bold">Image</label>
                                 @if($category->image)
                                     <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $category->image) }}"
+                                        <img src="{{ url('/categories/' . $category->image) }}"
                                              width="70" height="70"
                                              style="object-fit:cover; border-radius:6px;">
                                         <small class="text-muted ms-2">Current image</small>

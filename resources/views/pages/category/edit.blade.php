@@ -20,7 +20,7 @@
         <label>Image</label>
         @if($category->image)
             <div class="mb-2">
-                <img src="{{ asset('storage/' . $category->image) }}" 
+                <img src="{{ url('/categories/' . $category->image) }}" 
                      width="80" height="80" 
                      style="object-fit:cover;border-radius:8px">
             </div>

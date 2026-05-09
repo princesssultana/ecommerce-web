@@ -3,6 +3,7 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Frontend\HomeController as WebsiteHomeController;
+use App\Http\Controllers\Frontend\WebProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,8 @@ use App\Http\Controllers\SettingsController;
 
 //website routes
 Route::get('/',[WebsiteHomeController::class, 'home'])->name('website.home');
+Route::get('/products', [WebProductController::class, 'index'])->name('frontend.products.index');
+Route::get('/product/{id}/details', [WebProductController::class, 'show'])->name('frontend.product.show');
 
 
 

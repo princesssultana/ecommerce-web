@@ -8,29 +8,39 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained()->restrictOnDelete();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
-              $table->string('image')->nullable()->after('thumbnail');
-            
-           
-            $table->decimal('price', 10, 2);
-            $table->decimal('discount_price', 10, 2)->nullable();
-            $table->integer('stock')->default(0);
-            $table->string('thumbnail')->nullable();
-            
-            $table->boolean('featured')->default(false);
-            $table->enum('status', ['active', 'inactive', 'draft'])->default('active');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('products', function (Blueprint $table) {
+            // একটা product এর multiple images JSON এ store হবে
+            // ["images/p1.jpg", "images/p2.jpg", "images/p3.jpg"]
+            $table->json('gallery')->nullable()->after('image');
+
+            // Azlan page এর বাকি fields
+            $table->string('subtitle')->nullable()->after('description');
+            $table->string('badge')->nullable()->after('subtitle');
+            $table->text('fabric_care')->nullable()->after('badge');
+            $table->text('delivery_info')->nullable()->after('fabric_care');
+            $table->json('sizes')->nullable()->after('delivery_info');
+            $table->json('unavailable_sizes')->nullable()->after('sizes');
+            $table->json('colors')->nullable()->after('unavailable_sizes');
+            $table->decimal('rating', 2, 1)->default(0)->after('colors');
+            $table->integer('reviews_count')->default(0)->after('rating');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn([
+                'gallery',
+                'subtitle',
+                'badge',
+                'fabric_care',
+                'delivery_info',
+                'sizes',
+                'unavailable_sizes',
+                'colors',
+                'rating',
+                'reviews_count',
+            ]);
+        });
     }
 };

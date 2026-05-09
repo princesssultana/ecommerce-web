@@ -30,17 +30,27 @@ class CategoryController extends Controller
             'image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
+      
+          $fileName ='';
+        
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            
+            $fileName = date('Ymdhis') . str_replace(' ', '_', $file->getClientOriginalName());
+          $file->storeAs('categories', $fileName, 'public');
         }
+
+    dd($fileName);
+
+
+
 
         Category::create([
             'name'        => $request->c_name,
             'slug'        => Str::slug($request->c_name),
             'description' => $request->c_description,
             'status'      => $request->status ?? 1,
-            'image'       => $imagePath,
+            'image'       => $fileName
         ]);
 
         return redirect()->route('category.index')

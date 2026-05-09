@@ -10,10 +10,18 @@ class Product extends Model
 {
     use SoftDeletes;
 
-     protected $guarded = [];
-    
+    protected $guarded = [];
 
-    // slug auto-generate
+    protected $casts = [
+        'gallery'           => 'array',
+        'sizes'             => 'array',
+        'unavailable_sizes' => 'array',
+        'colors'            => 'array',
+        'featured'          => 'boolean',
+        'rating'            => 'decimal:1',
+    ];
+
+    // ── Auto slug ──────────────────────────────────────────
     protected static function boot()
     {
         parent::boot();
@@ -22,47 +30,91 @@ class Product extends Model
         });
     }
 
-    // Product কোন category তে আছে
+    // ── Relationships ───────────────────────────────────────
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-     // Discount percentage calculate করবে
-    public function getDiscountPercentAttribute()
-    {
-        if ($this->discount_price) {
-            return round((($this->price - $this->discount_price) / $this->price) * 100);
-        }
-        return null;
-    }
 
-    // Product এর অনেক images আছে
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class);
-    }
-
-    // Product এর primary/main image
-    public function primaryImage()
-    {
-        return $this->hasOne(ProductImage::class)->where('is_primary', true);
-    }
-
-    // Product এর order history
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // Discount আছে কিনা check
-    public function hasDiscount()
+    // ── Accessors ───────────────────────────────────────────
+
+    // Main large image — detail page এ
+    public function getMainImageUrlAttribute(): string
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+        // image না থাকলে gallery এর first টা দেখাবে
+        if (!empty($this->gallery)) {
+            return asset('storage/' . $this->gallery[0]);
+        }
+        return asset('images/placeholder.png');
+    }
+
+    // Thumbnail — card/list page এ
+    public function getThumbnailUrlAttribute(): string
+    {
+        if ($this->thumbnail) {
+            return asset('storage/' . $this->thumbnail);
+        }
+        return $this->main_image_url; // thumbnail না থাকলে main image
+    }
+
+    // Gallery array — সব images (main image সহ)
+    public function getAllImagesAttribute(): array
+    {
+        $imgs = [];
+
+        if ($this->image) {
+            $imgs[] = asset('storage/' . $this->image);
+        }
+
+        foreach ($this->gallery ?? [] as $g) {
+            $url = asset('storage/' . $g);
+            if (!in_array($url, $imgs)) {
+                $imgs[] = $url;
+            }
+        }
+
+        return $imgs;
+    }
+
+    // Discount %
+    public function getDiscountPercentAttribute(): ?int
+    {
+        if ($this->hasDiscount()) {
+            return (int) round(
+                (($this->price - $this->discount_price) / $this->price) * 100
+            );
+        }
+        return null;
+    }
+
+    // Final price
+    public function getFinalPriceAttribute(): float
+    {
+        return $this->hasDiscount() ? $this->discount_price : $this->price;
+    }
+
+    // ── Helpers ─────────────────────────────────────────────
+    public function hasDiscount(): bool
     {
         return !is_null($this->discount_price) && $this->discount_price < $this->price;
     }
 
-    // Final price — discount থাকলে discount price, না থাকলে regular price
-    public function getFinalPriceAttribute()
+    // ── Scopes ──────────────────────────────────────────────
+    public function scopeActive($query)
     {
-        return $this->hasDiscount() ? $this->discount_price : $this->price;
+        return $query->where('status', 'active');
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('featured', true);
     }
 }
