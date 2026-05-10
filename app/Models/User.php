@@ -58,6 +58,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
+    
 
     // Admin কিনা check করার helper
     public function isAdmin()

@@ -71,20 +71,20 @@
                     <div class="mt-auto">
                         @if($product->discount_price)
                             <span class="text-danger fw-bold fs-6">
-                                ৳{{ number_format($product->discount_price) }}
+                                BDT{{ number_format($product->discount_price) }}
                             </span>
                             <small class="text-muted text-decoration-line-through ms-1">
-                                ৳{{ number_format($product->price) }}
+                                BDT{{ number_format($product->price) }}
                             </small>
                         @else
                             <span class="fw-bold fs-6">
-                                ৳{{ number_format($product->price) }}
+                                BDT{{ number_format($product->price) }}
                             </span>
                         @endif
                     </div>
 
                     {{-- Add to Cart Button --}}
-                    <a href="#" class="btn btn-primary btn-sm mt-2 w-100">
+                    <a href="{{ route('cart.add', $product->id) }}" class="btn btn-primary btn-sm mt-2 w-100">
                         Add to Cart
                     </a>
                 </div>

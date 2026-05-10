@@ -21,7 +21,10 @@
                     <div class="product-image">
                         <img src="{{ url('/products/' . $product->thumbnail) }}" alt="{{ $product->name }}">
                         <div class="button">
-                            <a href="#" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
+                            {{-- data-id যোগ হয়েছে, class add-to-cart-btn যোগ হয়েছে --}}
+                            <a href="#" class="btn add-to-cart-btn" data-id="{{ $product->id }}">
+                                <i class="lni lni-cart"></i> Add to Cart
+                            </a>
                         </div>
                     </div>
                     <div class="product-info">
@@ -72,6 +75,34 @@
 
 @push('scripts')
 <script>
+{{-- Add to Cart --}}
+document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const productId = this.dataset.id;
+
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ product_id: productId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'login') {
+                alert('Please login first!');
+                window.location.href = '/login';
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+});
+
+{{-- Modal --}}
 function showProductModal(id) {
     const modal = document.getElementById('productModal');
     modal.style.display = 'flex';

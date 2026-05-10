@@ -65,8 +65,10 @@
                     <div class="product-image">
                         <img src="{{ url('/products/' . $product->thumbnail) }}" alt="#">
                         <div class="button">
-                            <a href="#" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                        </div>
+    <a href="{{ route('cart.add', $product->id) }}" class="btn add-to-cart-btn" data-id="{{ $product->id }}">
+        <i class="lni lni-cart"></i> Add to Cart
+    </a>
+</div>
                     </div>
                     <div class="product-info">
                         <span class="category">{{ $product->category->name ?? '' }}</span>
@@ -82,8 +84,8 @@
                             <li><span>4.0 Review(s)</span></li>
                         </ul>
                         <div class="price">
-                            <span>${{ $product->price }}</span>
-                            <span class="discount-price">${{ $product->discount_price }}</span>
+                            <span>BDT{{ number_format($product->price) }}</span>
+                            <span class="discount-price">BDT{{ number_format($product->discount_price) }}</span>
                         </div>
                     </div>
                 </div>
