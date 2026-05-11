@@ -21,8 +21,7 @@
                     <div class="product-image">
                         <img src="{{ url('/products/' . $product->thumbnail) }}" alt="{{ $product->name }}">
                         <div class="button">
-                            {{-- data-id যোগ হয়েছে, class add-to-cart-btn যোগ হয়েছে --}}
-                            <a href="#" class="btn add-to-cart-btn" data-id="{{ $product->id }}">
+                            <a href="{{ route('show.login') }}" class="btn">
                                 <i class="lni lni-cart"></i> Add to Cart
                             </a>
                         </div>
@@ -45,18 +44,23 @@
                             <span class="discount-price">${{ $product->discount_price }}</span>
                         </div>
                         <div class="button" style="margin-top: 10px;">
-                            <button onclick="showProductModal({{ $product->id }})" class="btn">
-                                <i class="lni lni-eye"></i> View
-                            </button>
+                            <a href="{{ route('product.details', $product->id) }}" class="btn">
+    <i class="lni lni-eye"></i> View
+</a>
                         </div>
                     </div>
                 </div>
             </div>
             @empty
-            <div class="col-12 text-center">
-                <p>No products found.</p>
-            </div>
+                <div class="col-12 text-center">
+                    <p>No products found.</p>
+                </div>
             @endforelse
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{ $products->links() }}
+            </div>
         </div>
     </div>
 </section>
@@ -75,34 +79,6 @@
 
 @push('scripts')
 <script>
-{{-- Add to Cart --}}
-document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const productId = this.dataset.id;
-
-        fetch('/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ product_id: productId })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'login') {
-                alert('Please login first!');
-                window.location.href = '/login';
-            } else {
-                alert(data.message);
-            }
-        });
-    });
-});
-
-{{-- Modal --}}
 function showProductModal(id) {
     const modal = document.getElementById('productModal');
     modal.style.display = 'flex';
@@ -112,7 +88,7 @@ function showProductModal(id) {
         .then(res => res.json())
         .then(p => {
             document.getElementById('modalContent').innerHTML = `
-                <img src="/products/${p.thumbnail ?? ''}"
+                <img src="/storage/${p.thumbnail ?? ''}"
                      onerror="this.style.display='none'"
                      style="width:100%; border-radius:10px; margin-bottom:16px; object-fit:cover; max-height:260px;">
                 <p style="font-size:11px; color:#94a3b8; text-transform:uppercase; margin:0;">${p.category?.name ?? ''}</p>

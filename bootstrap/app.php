@@ -11,8 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
-    })
+         $middleware->validateCsrfTokens(except: [
+            '/success',
+            '/cancel',
+            '/fail',
+            '/ipn',
+            '/pay-via-ajax',
+        ]);
+
+    
+    $middleware->redirectGuestsTo(fn () => route('show.login'));
+})
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        
     })->create();

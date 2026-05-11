@@ -3,71 +3,88 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Register page দেখাও
-    public function registerPage()
-    {
-        return view('frontend.pages.register');
+    public function showRegister(){
+        return view ('frontend.pages.register');
     }
 
-    // Register করো
-    public function register(Request $request)
+    // ── REGISTER SUBMIT ───────────────────────────
+    public function submitRegister(Request $request)
     {
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
+            'phone'    => 'required|string|max:20',
             'password' => 'required|min:6|confirmed',
-           
+        ], [
+            'name.required'      => 'Name is required',
+            'email.required'     => 'Email is required',
+            'email.unique'       => 'This email is already registered',
+            'phone.required'     => 'Phone number is required',
+            'password.min'       => 'Password must be at least 6 characters',
+            'password.confirmed' => 'Password confirmation does not match',
         ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // User create করো
+       $user = User::create([
+    'name'     => $request->name,
+    'email'    => $request->email,
+    'phone'    => $request->phone,
+    'password' => Hash::make($request->password),
+    
+            ]);
 
-        Auth::login($user); // register করেই login করিয়ে দাও
+        // Register এর পরে auto login
+        Auth::login($user);
 
-        return redirect('/')->with('success', 'Registration successful!');
+        return redirect()
+               ->route('products.list')
+               ->with('success', 'Registration successful!');
     }
 
-    // Login page দেখাও
-    public function loginPage()
-    {
-        return view('frontend.pages.login');
+    public function showLogin(){
+        return view ('frontend.pages.login');
     }
 
-    // Login করো
-    public function login(Request $request)
+    // ── LOGIN SUBMIT ──────────────────────────────
+    public function loginSubmit(Request $request)
     {
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
+        ], [
+            'email.required'    => 'Email is required',
+            'email.email'       => 'Provide a valid email',
+            'password.required' => 'Password is required',
         ]);
 
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // login সফল
-            return redirect('/')->with('success', 'Welcome back!');
+            $request->session()->regenerate();
+            return redirect()
+                  ->route('products.list')
+                   ->with('success', 'Login successful!');
         }
 
-        // login ব্যর্থ
-        return redirect()->back()->with('error', 'Email or password is incorrect!');
+        // Login fail
+        return back()
+               ->withErrors(['email' => 'Email or Password is incorrect'])
+               ->withInput($request->only('email'));
     }
 
-    // Logout করো
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/login');
-    }
+public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect()->route('show.login');
+}
+
 }

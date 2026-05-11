@@ -57,9 +57,16 @@
                             <ul class="user-login">
                                 @auth
                                     <li>
-                                        <a href="{{ route('cart.index') }}">
-                                            <i class="lni lni-cart"></i> Cart
-                                        </a>
+                                       <a href="{{ route('cart.index') }}" class="main-btn">
+    <i class="lni lni-cart"></i>
+    <span class="total-items">
+        @auth
+            {{ Auth::user()->cartItems->count() ?? 0 }}
+        @else
+            0
+        @endauth
+    </span>
+</a>
                                     </li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST" style="display:inline;">
@@ -71,8 +78,8 @@
                                         </form>
                                     </li>
                                 @else
-                                    <li><a href="{{ route('login') }}">Sign In</a></li>
-                                    <li><a href="{{ route('register') }}">Register</a></li>
+                                    <li><a href="{{ route('show.login') }}">Sign In</a></li>
+                                    <li><a href="{{ route('show.register') }}">Register</a></li>
                                 @endauth
                             </ul>
                         </div>
@@ -87,7 +94,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="{{ route('home') }}">
                             <img src="assets/images/logo/logo.svg" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
@@ -223,8 +230,8 @@
                                                     </form>
                                                 </li>
                                             @else
-                                                <li class="nav-item"><a href="{{ route('login') }}">Login</a></li>
-                                                <li class="nav-item"><a href="{{ route('register') }}">Register</a></li>
+                                                <li class="nav-item"><a href="{{ route('show.login') }}">Login</a></li>
+                                                <li class="nav-item"><a href="{{ route('show.register') }}">Register</a></li>
                                             @endauth
                                         </ul>
                                     </li>
@@ -233,7 +240,7 @@
                                             data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
                                             aria-expanded="false" aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
-                                            <li class="nav-item"><a href="{{ route('frontend.products.index') }}">All Products</a></li>
+                                            <li class="nav-item"><a href="{{ route('products.list') }}">All Products</a></li>
                                             <li class="nav-item"><a href="{{ route('cart.index') }}">Cart</a></li>
                                         </ul>
                                     </li>
@@ -302,7 +309,7 @@
                                         labore dolore magna aliqua.</p>
                                     <h3><span>Now Only</span> $320.99</h3>
                                     <div class="button">
-                                        <a href="{{ route('frontend.products.index') }}" class="btn">Shop Now</a>
+                                        <a href="{{ route('products.list') }}" class="btn">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +325,7 @@
                                         labore dolore magna aliqua.</p>
                                     <h3><span>Combo Only:</span> $590.00</h3>
                                     <div class="button">
-                                        <a href="{{ route('frontend.products.index') }}" class="btn">Shop Now</a>
+                                        <a href="{{ route('products.list') }}" class="btn">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +357,7 @@
                                     <h2>Weekly Sale!</h2>
                                     <p>Saving up to 50% off all online store items this week.</p>
                                     <div class="button">
-                                        <a class="btn" href="{{ route('frontend.products.index') }}">Shop Now</a>
+                                        <a class="btn" href="{{ route('products.list') }}">Shop Now</a>
                                     </div>
                                 </div>
                             </div>

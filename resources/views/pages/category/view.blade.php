@@ -7,6 +7,7 @@
 <div>
     <h4>Category Name: {{ $category->name }}</h3>
     <h4>Category Description: {{ $category->description }}</h3>
+    <h4>Category Image: {{ url('/categories' . $category->image) }}</h3>
     <h4>Category Status: {{ $category->status }}</h3>
 </div>
 

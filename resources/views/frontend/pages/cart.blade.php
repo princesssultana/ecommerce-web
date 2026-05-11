@@ -12,7 +12,7 @@
         @endif
 
         @if($cartItems->isEmpty())
-            <p>Your cart is empty. <a href="/products">Shop now</a></p>
+            <p>Your cart is empty. <a href="{{ route('products.list') }}">Shop now</a></p>
         @else
         <table class="table table-bordered">
             <thead>
@@ -29,7 +29,7 @@
                 @foreach($cartItems as $item)
                 <tr>
                     <td>
-                        <img src="{{ asset('storage/' . $item->product->thumbnail) }}"
+                        <img src="{{ asset('products/' . $item->product->thumbnail) }}"
                              width="60" height="60" style="object-fit:cover;">
                     </td>
                     <td>{{ $item->product->name }}</td>
@@ -59,7 +59,10 @@
             <button class="btn btn-warning">Clear Cart</button>
         </form>
 
-        <a href="/products" class="btn btn-primary">Continue Shopping</a>
+        <a href="{{ route('products.list') }}" class="btn btn-primary">Continue Shopping</a>
+        <a href="{{ route('checkout.index') }}" class="btn btn-dark">
+    Continue to Checkout
+</a>
         @endif
     </div>
 </section>

@@ -19,23 +19,21 @@ class CartRepository
     }
 
 
-    public function add($userId, $productId)
-    {
-        $item = $this->findItem($userId, $productId);
+    public function add($userId, $productId, $qty = 1)
+{
+    $item = $this->findItem($userId, $productId);
 
-        if ($item) {
-            // আগে থেকে cart এ থাকলে quantity বাড়াও
-            $item->increment('quantity');
-            return $item;
-        }
-
-        // নতুন item add করো
-        return Cart::create([
-            'user_id'    => $userId,
-            'product_id' => $productId,
-            'quantity'   => 1,
-        ]);
+    if ($item) {
+        $item->increment('quantity', $qty);
+        return $item;
     }
+
+    return Cart::create([
+        'user_id'    => $userId,
+        'product_id' => $productId,
+        'quantity'   => $qty,
+    ]);
+}
 
     public function remove($id, $userId)
     {

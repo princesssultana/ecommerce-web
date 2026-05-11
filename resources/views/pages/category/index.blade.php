@@ -37,9 +37,9 @@
             {{-- Image --}}
             <td>
                 @if($category->image)
-                    <img src="{{url('/categories/' . $category->image)}}" alt="{{ $category->name }}"
-                         width="50" height="50"
-                         style="object-fit:cover; border-radius:6px;">
+                <img src="{{ asset('categories/' . $category->image) }}"
+     width="50" height="50"
+     style="object-fit:cover; border-radius:6px;">
                 @else
                     <span class="text-muted">No image</span>
                 @endif
@@ -110,14 +110,14 @@
                                 <label class="form-label fw-bold">Image</label>
                                 @if($category->image)
                                     <div class="mb-2">
-                                        <img src="{{ url('/categories/' . $category->image) }}"
-                                             width="70" height="70"
-                                             style="object-fit:cover; border-radius:6px;">
+                                        <img src="{{ asset('categories/' . $category->image) }}"
+     width="50" height="50"
+     style="object-fit:cover; border-radius:6px;">
                                         <small class="text-muted ms-2">Current image</small>
                                     </div>
                                 @endif
                                 <input type="file" name="image" class="form-control" accept="image/*">
-                                <small class="text-muted">নতুন image দিলে পুরনোটা replace হবে</small>
+                                <small class="text-muted">Leave blank to keep current image</small>
                             </div>
 
                             <div class="mb-3">

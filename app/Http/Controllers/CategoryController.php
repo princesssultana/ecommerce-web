@@ -22,40 +22,33 @@ class CategoryController extends Controller
     }
 
     // নতুন category save করো
-    public function store(Request $request)
-    {
-        $request->validate([
-            'c_name'        => 'required|string|max:255|unique:categories,name',
-            'c_description' => 'required|string',
-            'image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+  public function store(Request $request)
+{
+    $request->validate([
+        'c_name'        => 'required|string|max:255|unique:categories,name',
+        'c_description' => 'required|string',
+        'image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-      
-          $fileName ='';
-        
-        if($request->hasFile('image')){
-            $file = $request->file('image');
-            
-            $fileName = date('Ymdhis') . str_replace(' ', '_', $file->getClientOriginalName());
-          $file->storeAs('categories', $fileName, 'public');
-        }
+    $fileName = '';
 
-    dd($fileName);
-
-
-
-
-        Category::create([
-            'name'        => $request->c_name,
-            'slug'        => Str::slug($request->c_name),
-            'description' => $request->c_description,
-            'status'      => $request->status ?? 1,
-            'image'       => $fileName
-        ]);
-
-        return redirect()->route('category.index')
-                         ->with('success', 'Category created successfully!');
+    if ($request->hasFile('image')) {
+        $file     = $request->file('image');
+        $fileName = date('Ymdhis') . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+        $file->storeAs('categories', $fileName, 'public');
     }
+
+    Category::create([
+        'name'        => $request->c_name,
+        'slug'        => Str::slug($request->c_name),
+        'description' => $request->c_description,
+        'status'      => $request->status ?? 'active',
+        'image'       => $fileName,
+    ]);
+
+    return redirect()->route('category.index')
+                     ->with('success', 'Category created successfully!');
+}
 
     // Single category দেখাও
     public function show($id)
@@ -86,7 +79,7 @@ class CategoryController extends Controller
 
         // নতুন image দিলে replace করো
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
+            $imagePath = $request->file('image')->store('/categories', 'public');
         }
 
         $category->update([

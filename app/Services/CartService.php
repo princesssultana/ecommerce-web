@@ -18,10 +18,10 @@ class CartService
         return $this->repo->getByUser($userId);
     }
 
-    public function addToCart($userId, $productId)
-    {
-        return $this->repo->add($userId, $productId);
-    }
+   public function addToCart($userId, $productId, $qty = 1)
+{
+    return $this->repo->add($userId, $productId, $qty);
+}
 
     public function removeFromCart($id, $userId)
     {

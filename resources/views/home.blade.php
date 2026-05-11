@@ -18,7 +18,7 @@
             <a href="#" class="text-decoration-none">
                 <div class="card text-center p-3 h-100 shadow-sm">
                     @if($category->image)
-                        <img src="{{ asset('storage/' . $category->image) }}"
+                        <img src="{{ url('/categories' . $category->image) }}"
                              height="60"
                              style="object-fit:contain; margin: 0 auto;">
                     @else

@@ -16,13 +16,17 @@ class WebProductController extends Controller
 
     public function index()
     {
-        $products = $this->service->getLatestProducts(4);
-        return view('frontend.pages.index', compact('products'));
+        $products = $this->service->getPaginatedProducts(12);
+        return view('frontend.pages.product.productlist', compact('products'));
     }
 
-    public function show($id)
-    {
-        $product = $this->service->getProductById($id);
-        return response()->json($product);
-    }
+    // Single Product Details page
+public function details($id)
+{
+    $product = $this->service->getProductById($id);
+    return view('frontend.pages.product.details', compact('product'));
+}
+
+
+
 }

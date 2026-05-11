@@ -13,7 +13,7 @@
                         <h2>Featured Categories</h2>
                         <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                             suffered alteration in some form.</p>
-                            <a href="{{ route('frontend.products.index') }}" class="btn">See All Products</a>
+                            <a href="{{ route('categories.list') }}" class="btn">See All Categories</a>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                         <h3 class="heading">{{ $category->name }}</h3>
                         <p>{{$category->description}}</p>
                         <ul>
-                            <li><a href="{{ route('frontend.products.index') }}">View Products</a></li>
+                            <li><a href="{{ route('products.list') }}">View Products</a></li>
                             <li><a href="product-grids.html"></a></li>
                             <li><a href="product-grids.html"></a></li>
                             <li><a href="product-grids.html"></a></li>
@@ -53,7 +53,7 @@
                     <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                         suffered alteration in some form.</p>
                     {{-- See All Button --}}
-                    <a href="{{ route('frontend.products.index') }}" class="btn" style="margin-top:15px; display:inline-block;">See All Products</a>
+                    <a href="{{ route('products.list') }}" class="btn" style="margin-top:15px; display:inline-block;">See All Products</a>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     <div class="product-image">
                         <img src="{{ url('/products/' . $product->thumbnail) }}" alt="#">
                         <div class="button">
-    <a href="{{ route('cart.add', $product->id) }}" class="btn add-to-cart-btn" data-id="{{ $product->id }}">
+    <a href="{{ route('show.login') }}" class="btn add-to-cart-btn" data-id="{{ $product->id }}">
         <i class="lni lni-cart"></i> Add to Cart
     </a>
 </div>

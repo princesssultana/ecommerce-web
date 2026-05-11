@@ -23,22 +23,12 @@ class CartController extends Controller
         return view('frontend.pages.cart', compact('cartItems', 'total'));
     }
 
-    public function add(Request $request)
-    {
-        if (!Auth::check()) {
-            return response()->json([
-                'status'  => 'login',
-                'message' => 'Please login first!'
-            ]);
-        }
-
-        $this->service->addToCart(Auth::id(), $request->product_id);
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Product added to cart!'
-        ]);
-    }
+   public function add(Request $request, $id)
+{
+    $qty = $request->query('qty', 1);
+    $this->service->addToCart(Auth::id(), $id, $qty);
+    return redirect()->back()->with('success', 'Product added to cart!');
+}
 
     public function remove($id)
     {

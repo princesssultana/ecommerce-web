@@ -6,23 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->restrictOnDelete();
-            $table->foreignId('variant_id')->nullable()->constrained('product_variants')->nullOnDelete();
-
-            // Snapshot of product at order time (price may change later)
-            $table->string('product_name');
-            $table->json('variant_attributes')->nullable(); // {"size": "L", "color": "Red"}
-            $table->decimal('unit_price', 10, 2);
-            $table->unsignedInteger('quantity');
-            $table->decimal('subtotal', 10, 2); // unit_price * quantity
-            $table->timestamps();
-        });
-    }
+   public function up()
+{
+    Schema::create('order_items', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('order_id')->constrained()->onDelete('cascade');
+        $table->foreignId('product_id')->constrained()->onDelete('cascade');
+        $table->integer('quantity');
+        $table->decimal('price', 10, 2);
+        $table->timestamps();
+    });
+}
 
     public function down(): void
     {
