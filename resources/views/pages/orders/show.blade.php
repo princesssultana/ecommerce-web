@@ -108,10 +108,10 @@
                 @foreach($order->items as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->product_name }}</td>
-                    <td>{{ $item->unit_price }} BDT</td>
+                    <td>{{ $item->product->name ?? 'N/A' }}</td>
+                    <td>{{ number_format($item->price, 2) }} BDT</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->subtotal }} BDT</td>
+                    <td>{{ number_format($item->price * $item->quantity, 2) }} BDT</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -128,19 +128,19 @@
         <table class="table table-bordered">
             <tr>
                 <th>Subtotal</th>
-                <td>{{ $order->subtotal }} BDT</td>
+                <td>{{ number_format($order->subtotal, 2) }} BDT</td>
             </tr>
             <tr>
                 <th>Shipping Charge</th>
-                <td>{{ $order->shipping_charge }} BDT</td>
+                <td>{{ number_format($order->shipping_charge, 2) }} BDT</td>
             </tr>
             <tr>
                 <th>Discount</th>
-                <td>{{ $order->discount }} BDT</td>
+                <td>{{ number_format($order->discount, 2) }} BDT</td>
             </tr>
             <tr class="table-success">
                 <th>Total</th>
-                <td><strong>{{ $order->total }} BDT</strong></td>
+                <td><strong>{{ number_format($order->total, 2) }} BDT</strong></td>
             </tr>
         </table>
     </div>

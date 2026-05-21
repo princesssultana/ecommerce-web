@@ -26,7 +26,7 @@
         <td>{{ $order->order_number }}</td>
         <td>{{ $order->user->name ?? 'N/A' }}</td>
         <td>{{ $order->shipping_name }}</td>
-        <td>{{ $order->total }} ৳</td>
+        <td>{{ $order->total }} BDT</td>
         <td>
           @if($order->delivery_type == 'express')
             <span class="badge bg-warning text-dark">Express</span>
@@ -51,7 +51,11 @@
         </td>
         <td>{{ $order->created_at->format('d M Y') }}</td>
         <td>
-          <a href="{{ route('orders.show', $order->id) }}" class="btn btn-primary btn-sm">View</a>
+
+          <a href="{{ route('invoice.show', $order->id) }}" 
+   class="btn btn-sm btn-outline-primary">
+    View Invoice
+</a>
           <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-warning btn-sm">Edit</a>
           <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline;">
             @csrf

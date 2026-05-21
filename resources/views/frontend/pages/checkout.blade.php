@@ -221,5 +221,9 @@ function highlightPayment() {
     document.getElementById('label-cod').style.borderColor        = selected === 'cod'        ? '#2563eb' : '#e2e8f0';
     document.getElementById('label-sslcommerz').style.borderColor = selected === 'sslcommerz' ? '#2563eb' : '#e2e8f0';
 }
+        
+window.addEventListener('DOMContentLoaded', function () {
+    highlightPayment();
+});
 </script>
 @endpush

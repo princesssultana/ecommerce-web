@@ -12,6 +12,12 @@ class Product extends Model
 
     protected $guarded = [];
 
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class)->withTrashed();
+    }
+
     protected $casts = [
         'gallery'           => 'array',
         'sizes'             => 'array',

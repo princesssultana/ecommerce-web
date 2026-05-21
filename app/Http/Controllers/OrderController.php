@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Mail\OrderConfirmed;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -40,23 +42,28 @@ class OrderController extends Controller
         return view('pages.orders.edit', compact('order'));
     }
 
-    // Status update save
-    public function update(Request $request, $id)
-    {
-        $order = Order::find($id);
+   public function update(Request $request, $id)
+{
+    $order = Order::with('user')->find($id);
 
-        if(!$order){
-            notify()->error('Order not found!');
-            return redirect()->back();
-        }
-
-        $order->update([
-            'status' => $request->status
-        ]);
-
-        //notify()->success('⚡️ Order Status Updated Successfully.');
-        return redirect()->route('orders.index');
+    if(!$order){
+        notify()->error('Order not found!');
+        return redirect()->back();
     }
+
+    $order->update([
+        'status' => $request->status
+    ]);
+
+    // Status "confirmed" হলে customer কে email পাঠাও
+    if($request->status === 'confirmed'){
+        Mail::to($order->user->email)->queue(new OrderConfirmed($order));
+    }
+
+    return redirect()->route('orders.index');
+}
+
+
 
     // Order delete
     public function destroy($id)

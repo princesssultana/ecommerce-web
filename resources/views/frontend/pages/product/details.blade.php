@@ -83,7 +83,7 @@
 </div>
 
 {{-- Add to Cart --}}
-<a id="cart-btn" href="/cart/add/{{ $product->id }}?qty=1" class="btn btn-primary"
+<a id="cart-btn" href="{{ route('cart.add',$product->id) }}" class="btn btn-primary"
    style="padding:12px 32px;">
    <i class="lni lni-cart"></i> Add to Cart
 </a>
@@ -92,8 +92,7 @@
 var qty = 1;
 document.querySelectorAll('button').forEach(function(btn) {
     btn.addEventListener('click', function() {
-        document.getElementById('cart-btn').href = '/cart/add/{{ $product->id }}?qty=' + qty;
-    });
+        document.getElementById('cart-btn').href = "{{ route('cart.add', $product->id) }}".replace('{{ $product->id }}', qty);
 });
 </script>
 
